@@ -2,7 +2,8 @@ package mov
 
 import (
 	"log"
-	"mp4info/comm"
+
+	"github.com/Limard/mp4info/comm"
 )
 
 // ftyp 文件类型的描述
@@ -45,8 +46,8 @@ func (ftyp *MovFtypBox) Parse(buf []byte) (err error) {
 	return nil
 }
 
-func (ftyp *MovFtypBox)Show(){
-	log.Printf("	Major Band:%s\n" , ftyp.MajorBrand)
-	log.Printf("	Monor Version:%d\n" , ftyp.MinorVersion)
-	log.Printf("	Compatible Brands:%s\n" , ftyp.CompatibleBrands)
- }
+func (ftyp *MovFtypBox) Show() {
+	log.Printf("	Major Band:%s\n", ftyp.MajorBrand)
+	log.Printf("	Monor Version:%d\n", ftyp.MinorVersion)
+	log.Printf("	Compatible Brands:%s\n", ftyp.CompatibleBrands)
+}

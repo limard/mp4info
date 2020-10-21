@@ -2,7 +2,8 @@ package mov
 
 import (
 	"log"
-	"mp4info/comm"
+
+	"github.com/Limard/mp4info/comm"
 )
 
 // media header box -> mdhd
@@ -20,56 +21,55 @@ type MovMdhdBox struct {
 	PreDefined      int // 2
 }
 
-
-func NewMdhdBox(head MovBaseBox)(mdhd *MovMdhdBox){
+func NewMdhdBox(head MovBaseBox) (mdhd *MovMdhdBox) {
 	mdhd = new(MovMdhdBox)
 	mdhd.BoxType = head.BoxType
 	mdhd.BoxSize = head.BoxSize
 	return mdhd
 }
 
-func (mdhd *MovMdhdBox)Parse(buf []byte) (err error){
+func (mdhd *MovMdhdBox) Parse(buf []byte) (err error) {
 	mdhd.Version = int(buf[0])
 	buf = buf[MDHD_VERSION_SIZE:]
 
-	mdhd.Flags , err = comm.BytesToInt(buf[:MDHD_FLAGS_SIZE])
-	if err != nil{
+	mdhd.Flags, err = comm.BytesToInt(buf[:MDHD_FLAGS_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_FLAGS_SIZE:]
 
-	mdhd.CreationTime , err = comm.BytesToInt(buf[:MDHD_CREATIONTIME_SIZE])
-	if err != nil{
+	mdhd.CreationTime, err = comm.BytesToInt(buf[:MDHD_CREATIONTIME_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_CREATIONTIME_SIZE:]
 
-	mdhd.ModificaionTime , err = comm.BytesToInt(buf[:MDHD_MODIFYTIME_SIZE])
-	if err != nil{
+	mdhd.ModificaionTime, err = comm.BytesToInt(buf[:MDHD_MODIFYTIME_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_MODIFYTIME_SIZE:]
 
-	mdhd.TimeScale , err = comm.BytesToInt(buf[:MDHD_TIMESCALE_SIZE])
-	if err != nil{
+	mdhd.TimeScale, err = comm.BytesToInt(buf[:MDHD_TIMESCALE_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_TIMESCALE_SIZE:]
 
-	mdhd.Duration , err = comm.BytesToInt(buf[:MDHD_DURATION_SIZE])
-	if err != nil{
+	mdhd.Duration, err = comm.BytesToInt(buf[:MDHD_DURATION_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_DURATION_SIZE:]
 
-	mdhd.Language , err = comm.BytesToInt(buf[:MDHD_LANGUAGE_SIZE])
-	if err != nil{
+	mdhd.Language, err = comm.BytesToInt(buf[:MDHD_LANGUAGE_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_LANGUAGE_SIZE:]
 
-	mdhd.PreDefined , err = comm.BytesToInt(buf[:MDHD_PREDEFINED_SIZE])
-	if err != nil{
+	mdhd.PreDefined, err = comm.BytesToInt(buf[:MDHD_PREDEFINED_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MDHD_PREDEFINED_SIZE:]
@@ -78,16 +78,14 @@ func (mdhd *MovMdhdBox)Parse(buf []byte) (err error){
 	return nil
 }
 
-func (mdhd *MovMdhdBox)Show(){
+func (mdhd *MovMdhdBox) Show() {
 	log.Printf("			mdhd\n")
-	log.Printf("				Version:%d\n" , mdhd.Version)
-	log.Printf("				Flags:%d\n" , mdhd.Flags)
-	log.Printf("				CreationTime:%d\n" , mdhd.CreationTime)
-	log.Printf("				ModificaionTime:%d\n" , mdhd.ModificaionTime)
-	log.Printf("				TimeScale:%d\n" , mdhd.TimeScale)
-	log.Printf("				Duration:%d\n" , mdhd.Duration)
-	log.Printf("				Language:%d\n" , mdhd.Language)
-	log.Printf("				PreDefined:%d\n" , mdhd.PreDefined)
+	log.Printf("				Version:%d\n", mdhd.Version)
+	log.Printf("				Flags:%d\n", mdhd.Flags)
+	log.Printf("				CreationTime:%d\n", mdhd.CreationTime)
+	log.Printf("				ModificaionTime:%d\n", mdhd.ModificaionTime)
+	log.Printf("				TimeScale:%d\n", mdhd.TimeScale)
+	log.Printf("				Duration:%d\n", mdhd.Duration)
+	log.Printf("				Language:%d\n", mdhd.Language)
+	log.Printf("				PreDefined:%d\n", mdhd.PreDefined)
 }
-
-

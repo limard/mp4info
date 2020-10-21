@@ -2,7 +2,8 @@ package mov
 
 import (
 	"log"
-	"mp4info/comm"
+
+	"github.com/Limard/mp4info/comm"
 )
 
 type MovMvhdBox struct {
@@ -64,13 +65,13 @@ func (mvhd *MovMvhdBox) Parse(buf []byte) (err error) {
 	}
 	buf = buf[MVHD_DURATION_SIZE:]
 
-	mvhd.Rate, err = comm.BytesToFloat32Ex(buf[:MVHD_RATE_SIZE/2] , buf[MVHD_RATE_SIZE/2:MVHD_RATE_SIZE])
+	mvhd.Rate, err = comm.BytesToFloat32Ex(buf[:MVHD_RATE_SIZE/2], buf[MVHD_RATE_SIZE/2:MVHD_RATE_SIZE])
 	if err != nil {
 		return err
 	}
 	buf = buf[MVHD_RATE_SIZE:]
 
-	mvhd.Volume, err = comm.BytesToFloat32Ex(buf[:MVHD_VOLUME_SIZE/2] , buf[MVHD_VOLUME_SIZE/2:MVHD_VOLUME_SIZE])
+	mvhd.Volume, err = comm.BytesToFloat32Ex(buf[:MVHD_VOLUME_SIZE/2], buf[MVHD_VOLUME_SIZE/2:MVHD_VOLUME_SIZE])
 	if err != nil {
 		return err
 	}
@@ -94,16 +95,16 @@ func (mvhd *MovMvhdBox) Parse(buf []byte) (err error) {
 	return nil
 }
 
-func (mvhd *MovMvhdBox)Show(){
-	log.Printf("		Version:%d\n" , mvhd.Version)
-	log.Printf("		Flags:%d\n" , mvhd.Flags)
-	log.Printf("		Creation Time:%d\n" , mvhd.CreationTime)
-	log.Printf("		Modificaion Time:%d\n" , mvhd.ModificaionTime)
-	log.Printf("		Time Scale:%d\n" , mvhd.TimeScale)
-	log.Printf("		Duration:%d\n" , mvhd.Duration)
-	log.Printf("		Rate:%f\n" , mvhd.Rate)
-	log.Printf("		Volume:%f\n" , mvhd.Volume)
-	log.Printf("		Matrix:%s\n" , mvhd.Matrix)
-	log.Printf("		PreDefined:%s\n" , mvhd.PreDefined)
-	log.Printf("		Next Track ID:%d\n" , mvhd.NextTrackID)
+func (mvhd *MovMvhdBox) Show() {
+	log.Printf("		Version:%d\n", mvhd.Version)
+	log.Printf("		Flags:%d\n", mvhd.Flags)
+	log.Printf("		Creation Time:%d\n", mvhd.CreationTime)
+	log.Printf("		Modificaion Time:%d\n", mvhd.ModificaionTime)
+	log.Printf("		Time Scale:%d\n", mvhd.TimeScale)
+	log.Printf("		Duration:%d\n", mvhd.Duration)
+	log.Printf("		Rate:%f\n", mvhd.Rate)
+	log.Printf("		Volume:%f\n", mvhd.Volume)
+	log.Printf("		Matrix:%s\n", mvhd.Matrix)
+	log.Printf("		PreDefined:%s\n", mvhd.PreDefined)
+	log.Printf("		Next Track ID:%d\n", mvhd.NextTrackID)
 }

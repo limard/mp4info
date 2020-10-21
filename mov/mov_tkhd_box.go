@@ -2,7 +2,8 @@ package mov
 
 import (
 	"log"
-	"mp4info/comm"
+
+	"github.com/Limard/mp4info/comm"
 )
 
 type MovTkhdBox struct {
@@ -57,14 +58,14 @@ func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
 	}
 	buf = buf[TKHD_CREATIONTIME_SIZE:]
 
-	tkhd.ModificationTime , err = comm.BytesToInt(buf[:TKHD_MODIFYTIME_SIZE])
-	if err != nil{
+	tkhd.ModificationTime, err = comm.BytesToInt(buf[:TKHD_MODIFYTIME_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_MODIFYTIME_SIZE:]
 
-	tkhd.TrackID , err = comm.BytesToInt(buf[:MVHD_TRACKID_SIZE])
-	if err != nil{
+	tkhd.TrackID, err = comm.BytesToInt(buf[:MVHD_TRACKID_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MVHD_TRACKID_SIZE:]
@@ -72,8 +73,8 @@ func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
 	tkhd.Reserved1 = buf[:TKHD_RESERVED1_SIZE]
 	buf = buf[TKHD_RESERVED1_SIZE:]
 
-	tkhd.Duration , err = comm.BytesToInt(buf[:MVHD_DURATION_SIZE])
-	if err != nil{
+	tkhd.Duration, err = comm.BytesToInt(buf[:MVHD_DURATION_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[MVHD_DURATION_SIZE:]
@@ -81,20 +82,20 @@ func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
 	tkhd.Reserved2 = buf[:TKHD_RESERVED2_SIZE]
 	buf = buf[TKHD_RESERVED2_SIZE:]
 
-	tkhd.Layer , err = comm.BytesToInt(buf[:TKHD_LAYER_SIZE])
-	if err != nil{
+	tkhd.Layer, err = comm.BytesToInt(buf[:TKHD_LAYER_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_LAYER_SIZE:]
 
-	tkhd.AlternateGroup , err = comm.BytesToInt(buf[:TKHD_ALTERGROUP_SIZE])
-	if err != nil{
+	tkhd.AlternateGroup, err = comm.BytesToInt(buf[:TKHD_ALTERGROUP_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_ALTERGROUP_SIZE:]
 
-	tkhd.Volume , err = comm.BytesToFloat32Ex(buf[:TKHD_VOLUME_SIZE/2] , buf[TKHD_VOLUME_SIZE/2:TKHD_VOLUME_SIZE])
-	if err != nil{
+	tkhd.Volume, err = comm.BytesToFloat32Ex(buf[:TKHD_VOLUME_SIZE/2], buf[TKHD_VOLUME_SIZE/2:TKHD_VOLUME_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_VOLUME_SIZE:]
@@ -105,14 +106,14 @@ func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
 	tkhd.Matrix = buf[:TKHD_MATRIX_SIZE]
 	buf = buf[TKHD_MATRIX_SIZE:]
 
-	tkhd.Width , err = comm.BytesToFloat32Ex(buf[:TKHD_WIDTH_SIZE/2] , buf[TKHD_WIDTH_SIZE/2:TKHD_WIDTH_SIZE])
-	if err != nil{
+	tkhd.Width, err = comm.BytesToFloat32Ex(buf[:TKHD_WIDTH_SIZE/2], buf[TKHD_WIDTH_SIZE/2:TKHD_WIDTH_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_WIDTH_SIZE:]
 
-	tkhd.Height , err = comm.BytesToFloat32Ex(buf[:TKHD_HEIGHT_SIZE/2] , buf[TKHD_HEIGHT_SIZE/2:TKHD_HEIGHT_SIZE])
-	if err != nil{
+	tkhd.Height, err = comm.BytesToFloat32Ex(buf[:TKHD_HEIGHT_SIZE/2], buf[TKHD_HEIGHT_SIZE/2:TKHD_HEIGHT_SIZE])
+	if err != nil {
 		return err
 	}
 	buf = buf[TKHD_HEIGHT_SIZE:]
@@ -121,16 +122,16 @@ func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
 	return nil
 }
 
-func (tkhd* MovTkhdBox)Show(){
-	log.Printf("			Version:%d\n" , tkhd.Version)
-	log.Printf("			Flags:%d\n" , tkhd.Flags)
-	log.Printf("			Creation Time:%d\n" , tkhd.CreationTime)
-	log.Printf("			Modification Time:%d\n" , tkhd.ModificationTime)
-	log.Printf("			Track ID:%d\n" , tkhd.TrackID)
-	log.Printf("			Duration:%d\n" , tkhd.Duration)
-	log.Printf("			Layer:%d\n" , tkhd.Layer)
-	log.Printf("			Alternate Group:%d\n" , tkhd.AlternateGroup)
-	log.Printf("			Volume:%f\n" , tkhd.Volume)
-	log.Printf("			Width:%f\n" , tkhd.Width)
-	log.Printf("			Height:%f\n" , tkhd.Height)
+func (tkhd *MovTkhdBox) Show() {
+	log.Printf("			Version:%d\n", tkhd.Version)
+	log.Printf("			Flags:%d\n", tkhd.Flags)
+	log.Printf("			Creation Time:%d\n", tkhd.CreationTime)
+	log.Printf("			Modification Time:%d\n", tkhd.ModificationTime)
+	log.Printf("			Track ID:%d\n", tkhd.TrackID)
+	log.Printf("			Duration:%d\n", tkhd.Duration)
+	log.Printf("			Layer:%d\n", tkhd.Layer)
+	log.Printf("			Alternate Group:%d\n", tkhd.AlternateGroup)
+	log.Printf("			Volume:%f\n", tkhd.Volume)
+	log.Printf("			Width:%f\n", tkhd.Width)
+	log.Printf("			Height:%f\n", tkhd.Height)
 }
