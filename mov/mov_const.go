@@ -1,5 +1,7 @@
 package mov
 
+import "time"
+
 const (
 	//base box head
 	BASEBOX_HEAD_SIZE_LEN = 4
@@ -56,7 +58,7 @@ const (
 	HDLR_PREDEFINED_SIZE  = 4
 	HDLR_HANDLERTYPE_SIZE = 4
 	HDLR_RESERVED_SIZE    = 12
-	HDLR_NAME_SIZE        = 0	// 未知，不确定大小
+	HDLR_NAME_SIZE        = 0 // 未知，不确定大小
 
 	FTYP_BOX = "ftyp" //文件类型
 	MOOV_BOX = "moov" //音视频数据的metadatat信息
@@ -69,3 +71,11 @@ const (
 	MDHD_BOX = "mdhd" //media info box 媒体信息容器
 	HDLR_BOX = "hdlr" //hdlr解释了媒体的播放过程信息，该box也可以被包含在meta box（meta）中。
 )
+
+var (
+	baseTime1904 time.Time
+)
+
+func init() {
+	baseTime1904, _ = time.Parse("2006-01-02", "1904-01-01")
+}

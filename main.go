@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -10,27 +9,16 @@ import (
 )
 
 func main() {
-	fmt.Println("vim-go")
-	pfile, err := os.Open("F:\\video\\file6.mp4")
+	pfile, err := os.Open(`D:\Photo\20-10-08 湖北\GoPro\GH010307.MP4`)
 	if err != nil {
 		log.Panic(err.Error())
 		return
 	}
 
-	buf, err := ioutil.ReadAll(pfile)
-	if err != nil {
-		log.Panic(err.Error())
-		return
+	box, e := mov.ParseBox(pfile)
+	if e != nil {
+		fmt.Println(e)
 	}
-
-	for {
-		boxLen, err := mov.ParseBox(buf)
-		if err != nil {
-			log.Println(err.Error())
-		}
-		buf = buf[boxLen:]
-		if len(buf) == 0 {
-			break
-		}
-	}
+	fmt.Println(box.FileType.String())
+	fmt.Println(box.Moive.MovieHeader.String())
 }

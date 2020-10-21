@@ -1,53 +1,77 @@
 package mov
 
 import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
+	"io"
 	"log"
-
-	"github.com/Limard/mp4info/comm"
 )
 
 // ftyp 文件类型的描述
 type MovFtypBox struct {
 	MovBaseBox
-	MajorBrand       string
-	MinorVersion     int
-	CompatibleBrands []string
+	MovFtypBoxContent
+}
+
+type MovFtypBoxContent struct {
+	MajorBrand       [FTYP_MAJORBRAND_SIZE]byte
+	MinorVersion     int32
+	CompatibleBrands [FTYP_COMPATIBLE_BRANDS_SIZE]byte
 }
 
 // 申请一个ftyp类型的box
-func NewFtypBox(head MovBaseBox) (ftyp *MovFtypBox) {
+func NewFtypBox(head *MovBaseBox, r io.ReadSeeker) (ftyp *MovFtypBox, e error) {
 	ftyp = new(MovFtypBox)
-	ftyp.BoxType = head.BoxType
 	ftyp.BoxSize = head.BoxSize
-	return ftyp
+	ftyp.BoxType = head.BoxType
+
+	buf := make([]byte, ftyp.BoxSize-8)
+	_, e = r.Read(buf)
+	if e != nil {
+		log.Println(e)
+		return
+	}
+
+	content := MovFtypBoxContent{}
+	e = binary.Read(bytes.NewReader(buf), binary.BigEndian, &content)
+	if e != nil {
+		log.Println(e)
+		return
+	}
+
+	ftyp.MovFtypBoxContent = content
+	return
 }
 
 // 解析ftyp的box
-func (ftyp *MovFtypBox) Parse(buf []byte) (err error) {
-	log.Println("ftyp")
-	ftyp.MajorBrand = string(buf[:FTYP_MAJORBRAND_SIZE])
-	buf = buf[FTYP_MAJORBRAND_SIZE:]
+// func (ftyp *MovFtypBox) Parse(r io.ReadSeeker) (err error) {
 
-	ftyp.MinorVersion, err = comm.BytesToInt(buf[:FTYP_MINORVERSION_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[FTYP_MINORVERSION_SIZE:]
+// 	ftyp.MajorBrand = string(buf[:FTYP_MAJORBRAND_SIZE])
+// 	buf = buf[FTYP_MAJORBRAND_SIZE:]
 
-	for {
-		if len(buf) < FTYP_COMPATIBLE_BRANDS_SIZE {
-			break
-		}
-		ftyp.CompatibleBrands = append(ftyp.CompatibleBrands, string(buf[:FTYP_COMPATIBLE_BRANDS_SIZE]))
-		buf = buf[FTYP_COMPATIBLE_BRANDS_SIZE:]
-	}
+// 	ftyp.MinorVersion, err = comm.BytesToInt(buf[:FTYP_MINORVERSION_SIZE])
+// 	if err != nil {
+// 		return err
+// 	}
+// 	buf = buf[FTYP_MINORVERSION_SIZE:]
 
-	ftyp.Show()
-	return nil
-}
+// 	for {
+// 		if len(buf) < FTYP_COMPATIBLE_BRANDS_SIZE {
+// 			break
+// 		}
+// 		ftyp.CompatibleBrands = append(ftyp.CompatibleBrands, string(buf[:FTYP_COMPATIBLE_BRANDS_SIZE]))
+// 		buf = buf[FTYP_COMPATIBLE_BRANDS_SIZE:]
+// 	}
 
-func (ftyp *MovFtypBox) Show() {
-	log.Printf("	Major Band:%s\n", ftyp.MajorBrand)
-	log.Printf("	Monor Version:%d\n", ftyp.MinorVersion)
-	log.Printf("	Compatible Brands:%s\n", ftyp.CompatibleBrands)
+// 	ftyp.Show()
+// 	return nil
+// }
+
+func (ftyp *MovFtypBox) String() string {
+	str := "== ftyp == \n"
+	str += fmt.Sprintf("Major Band:%s\n", ftyp.MajorBrand)
+	str += fmt.Sprintf("Monor Version:%d\n", ftyp.MinorVersion)
+	str += fmt.Sprintf("Compatible Brands:%s\n", ftyp.CompatibleBrands)
+	return str
 }

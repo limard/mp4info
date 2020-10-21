@@ -1,28 +1,31 @@
 package mov
 
 import (
-	"errors"
-
-	"github.com/Limard/mp4info/comm"
+	"encoding/binary"
+	"io"
 )
 
 // 基础的 box 头
 type MovBaseBox struct {
-	BoxSize int
+	BoxSize int // 包括box header和box body整个box的大小
 	BoxType string
 }
 
 // 解析基础包头
-func (basebox *MovBaseBox) Parse(buf []byte) (err error) {
-	if len(buf) < BASEBOX_HEAD_LEN {
-		return errors.New("invalid buf to parse base box header")
+func ParseMovBaseBox(r io.ReadSeeker) (box *MovBaseBox, e error) {
+	b := &struct {
+		Size int32
+		Type [BASEBOX_HEAD_TYPE_LEN]byte
+	}{}
+
+	e = binary.Read(r, binary.BigEndian, b)
+	if e != nil {
+		return
 	}
 
-	basebox.BoxSize, err = comm.BytesToInt(buf[:BASEBOX_HEAD_SIZE_LEN])
-	if err != nil {
-		return err
+	box = &MovBaseBox{
+		BoxSize: int(b.Size),
+		BoxType: string(b.Type[:]),
 	}
-
-	basebox.BoxType = string(buf[BASEBOX_HEAD_SIZE_LEN:BASEBOX_HEAD_LEN])
-	return nil
+	return
 }

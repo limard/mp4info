@@ -1,9 +1,8 @@
 package mov
 
 import (
+	"io"
 	"log"
-
-	"github.com/Limard/mp4info/comm"
 )
 
 // media header box -> mdhd
@@ -21,60 +20,60 @@ type MovMdhdBox struct {
 	PreDefined      int // 2
 }
 
-func NewMdhdBox(head MovBaseBox) (mdhd *MovMdhdBox) {
+func NewMdhdBox(head *MovBaseBox) (mdhd *MovMdhdBox) {
 	mdhd = new(MovMdhdBox)
 	mdhd.BoxType = head.BoxType
 	mdhd.BoxSize = head.BoxSize
 	return mdhd
 }
 
-func (mdhd *MovMdhdBox) Parse(buf []byte) (err error) {
-	mdhd.Version = int(buf[0])
-	buf = buf[MDHD_VERSION_SIZE:]
+func (mdhd *MovMdhdBox) Parse(r io.ReadSeeker) (err error) {
+	// mdhd.Version = int(buf[0])
+	// buf = buf[MDHD_VERSION_SIZE:]
 
-	mdhd.Flags, err = comm.BytesToInt(buf[:MDHD_FLAGS_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_FLAGS_SIZE:]
+	// mdhd.Flags, err = comm.BytesToInt(buf[:MDHD_FLAGS_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_FLAGS_SIZE:]
 
-	mdhd.CreationTime, err = comm.BytesToInt(buf[:MDHD_CREATIONTIME_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_CREATIONTIME_SIZE:]
+	// mdhd.CreationTime, err = comm.BytesToInt(buf[:MDHD_CREATIONTIME_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_CREATIONTIME_SIZE:]
 
-	mdhd.ModificaionTime, err = comm.BytesToInt(buf[:MDHD_MODIFYTIME_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_MODIFYTIME_SIZE:]
+	// mdhd.ModificaionTime, err = comm.BytesToInt(buf[:MDHD_MODIFYTIME_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_MODIFYTIME_SIZE:]
 
-	mdhd.TimeScale, err = comm.BytesToInt(buf[:MDHD_TIMESCALE_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_TIMESCALE_SIZE:]
+	// mdhd.TimeScale, err = comm.BytesToInt(buf[:MDHD_TIMESCALE_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_TIMESCALE_SIZE:]
 
-	mdhd.Duration, err = comm.BytesToInt(buf[:MDHD_DURATION_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_DURATION_SIZE:]
+	// mdhd.Duration, err = comm.BytesToInt(buf[:MDHD_DURATION_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_DURATION_SIZE:]
 
-	mdhd.Language, err = comm.BytesToInt(buf[:MDHD_LANGUAGE_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_LANGUAGE_SIZE:]
+	// mdhd.Language, err = comm.BytesToInt(buf[:MDHD_LANGUAGE_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_LANGUAGE_SIZE:]
 
-	mdhd.PreDefined, err = comm.BytesToInt(buf[:MDHD_PREDEFINED_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MDHD_PREDEFINED_SIZE:]
+	// mdhd.PreDefined, err = comm.BytesToInt(buf[:MDHD_PREDEFINED_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MDHD_PREDEFINED_SIZE:]
 
-	mdhd.Show()
+	// mdhd.Show()
 	return nil
 }
 

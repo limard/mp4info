@@ -1,9 +1,8 @@
 package mov
 
 import (
+	"io"
 	"log"
-
-	"github.com/Limard/mp4info/comm"
 )
 
 type MovTkhdBox struct {
@@ -32,93 +31,91 @@ type MovTkhdBox struct {
 }
 
 // 新建一个tkdh box
-func NewTkhdBox(head MovBaseBox) (tkhd *MovTkhdBox) {
+func NewTkhdBox(head *MovBaseBox, r io.ReadSeeker) (tkhd *MovTkhdBox, e error) {
 	tkhd = new(MovTkhdBox)
 	tkhd.BoxSize = head.BoxSize
 	tkhd.BoxType = head.BoxType
 
-	return tkhd
+	return
 }
 
-func (tkhd *MovTkhdBox) Parse(buf []byte) (err error) {
-	log.Println("		tkhd")
+func (tkhd *MovTkhdBox) Parse(r io.ReadSeeker) (err error) {
+	// tkhd.Version = uint8(buf[0])
+	// buf = buf[TKHD_VERSION_SIZE:]
 
-	tkhd.Version = uint8(buf[0])
-	buf = buf[TKHD_VERSION_SIZE:]
+	// tkhd.Flags, err = comm.BytesToInt(buf[:TKHD_FLAGS_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_FLAGS_SIZE:]
 
-	tkhd.Flags, err = comm.BytesToInt(buf[:TKHD_FLAGS_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_FLAGS_SIZE:]
+	// tkhd.CreationTime, err = comm.BytesToInt(buf[:TKHD_CREATIONTIME_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_CREATIONTIME_SIZE:]
 
-	tkhd.CreationTime, err = comm.BytesToInt(buf[:TKHD_CREATIONTIME_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_CREATIONTIME_SIZE:]
+	// tkhd.ModificationTime, err = comm.BytesToInt(buf[:TKHD_MODIFYTIME_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_MODIFYTIME_SIZE:]
 
-	tkhd.ModificationTime, err = comm.BytesToInt(buf[:TKHD_MODIFYTIME_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_MODIFYTIME_SIZE:]
+	// tkhd.TrackID, err = comm.BytesToInt(buf[:MVHD_TRACKID_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MVHD_TRACKID_SIZE:]
 
-	tkhd.TrackID, err = comm.BytesToInt(buf[:MVHD_TRACKID_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MVHD_TRACKID_SIZE:]
+	// tkhd.Reserved1 = buf[:TKHD_RESERVED1_SIZE]
+	// buf = buf[TKHD_RESERVED1_SIZE:]
 
-	tkhd.Reserved1 = buf[:TKHD_RESERVED1_SIZE]
-	buf = buf[TKHD_RESERVED1_SIZE:]
+	// tkhd.Duration, err = comm.BytesToInt(buf[:MVHD_DURATION_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[MVHD_DURATION_SIZE:]
 
-	tkhd.Duration, err = comm.BytesToInt(buf[:MVHD_DURATION_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[MVHD_DURATION_SIZE:]
+	// tkhd.Reserved2 = buf[:TKHD_RESERVED2_SIZE]
+	// buf = buf[TKHD_RESERVED2_SIZE:]
 
-	tkhd.Reserved2 = buf[:TKHD_RESERVED2_SIZE]
-	buf = buf[TKHD_RESERVED2_SIZE:]
+	// tkhd.Layer, err = comm.BytesToInt(buf[:TKHD_LAYER_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_LAYER_SIZE:]
 
-	tkhd.Layer, err = comm.BytesToInt(buf[:TKHD_LAYER_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_LAYER_SIZE:]
+	// tkhd.AlternateGroup, err = comm.BytesToInt(buf[:TKHD_ALTERGROUP_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_ALTERGROUP_SIZE:]
 
-	tkhd.AlternateGroup, err = comm.BytesToInt(buf[:TKHD_ALTERGROUP_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_ALTERGROUP_SIZE:]
+	// tkhd.Volume, err = comm.BytesToFloat32Ex(buf[:TKHD_VOLUME_SIZE/2], buf[TKHD_VOLUME_SIZE/2:TKHD_VOLUME_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_VOLUME_SIZE:]
 
-	tkhd.Volume, err = comm.BytesToFloat32Ex(buf[:TKHD_VOLUME_SIZE/2], buf[TKHD_VOLUME_SIZE/2:TKHD_VOLUME_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_VOLUME_SIZE:]
+	// tkhd.Reserved3 = buf[:TKHD_RESERVED3_SIZE]
+	// buf = buf[TKHD_RESERVED3_SIZE:]
 
-	tkhd.Reserved3 = buf[:TKHD_RESERVED3_SIZE]
-	buf = buf[TKHD_RESERVED3_SIZE:]
+	// tkhd.Matrix = buf[:TKHD_MATRIX_SIZE]
+	// buf = buf[TKHD_MATRIX_SIZE:]
 
-	tkhd.Matrix = buf[:TKHD_MATRIX_SIZE]
-	buf = buf[TKHD_MATRIX_SIZE:]
+	// tkhd.Width, err = comm.BytesToFloat32Ex(buf[:TKHD_WIDTH_SIZE/2], buf[TKHD_WIDTH_SIZE/2:TKHD_WIDTH_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_WIDTH_SIZE:]
 
-	tkhd.Width, err = comm.BytesToFloat32Ex(buf[:TKHD_WIDTH_SIZE/2], buf[TKHD_WIDTH_SIZE/2:TKHD_WIDTH_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_WIDTH_SIZE:]
+	// tkhd.Height, err = comm.BytesToFloat32Ex(buf[:TKHD_HEIGHT_SIZE/2], buf[TKHD_HEIGHT_SIZE/2:TKHD_HEIGHT_SIZE])
+	// if err != nil {
+	// 	return err
+	// }
+	// buf = buf[TKHD_HEIGHT_SIZE:]
 
-	tkhd.Height, err = comm.BytesToFloat32Ex(buf[:TKHD_HEIGHT_SIZE/2], buf[TKHD_HEIGHT_SIZE/2:TKHD_HEIGHT_SIZE])
-	if err != nil {
-		return err
-	}
-	buf = buf[TKHD_HEIGHT_SIZE:]
-
-	tkhd.Show()
+	// tkhd.Show()
 	return nil
 }
 

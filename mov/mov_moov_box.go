@@ -1,31 +1,54 @@
 package mov
 
-import "log"
+import (
+	"io"
+)
 
-type MovMoovBox struct{
+type MovMoovBox struct {
 	MovBaseBox
-}
-
-func NewMoovBox(head MovBaseBox)(moov* MovMoovBox){
-	moov = new(MovMoovBox)
-	moov.BoxType = head.BoxType
-	moov.BoxSize = head.BoxSize
-	return moov
+	MovieHeader *MovMvhdBox   // mvhd
+	Track       []*MovTrakBox //trak
+	// udta
+	// iods
 }
 
 // 解析moov box
-func (moov* MovMoovBox)Parse(buf []byte) (err error){
-	log.Printf("%s\n" , moov.BoxType)
+func NewMoovBox(head *MovBaseBox, r io.ReadSeeker) (moov *MovMoovBox, e error) {
+	moov = new(MovMoovBox)
+	moov.BoxType = head.BoxType
+	moov.BoxSize = head.BoxSize
 
-	for{
-		boxLen , err := ParseBox(buf)
-		if err != nil{
-			return err
+	for {
+		var base *MovBaseBox
+		base, e = ParseMovBaseBox(r)
+		if e != nil {
+			if e == io.EOF {
+				e = nil
+			}
+			break
 		}
-		buf = buf[boxLen:]
-		if len(buf) == 0{
+
+		if base.BoxSize <= 0 {
+			break
+		}
+
+		contentSize := base.BoxSize - 8
+		switch base.BoxType {
+		default:
+			buf := make([]byte, contentSize)
+			_, e = r.Read(buf)
+		case "mvhd":
+			moov.MovieHeader, e = NewMvhdBox(base, r)
+		case "trak":
+			_, e = r.Seek(int64(contentSize), io.SeekCurrent)
+			// trak, e := NewTrakBox(base)
+		}
+		if e != nil {
+			if e == io.EOF {
+				e = nil
+			}
 			break
 		}
 	}
-	return nil
+	return
 }
