@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	pfile, err := os.Open(`D:\Photo\20-10-08 湖北\GoPro\GH010307.MP4`)
+	pfile, err := os.Open(`F:\Photo\2019\19-10-01 乌拉盖\Mi9\VID_20191002_204806.mp4`)
 	if err != nil {
 		log.Panic(err.Error())
 		return

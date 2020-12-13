@@ -17,8 +17,13 @@ func NewMoovBox(head *MovBaseBox, r io.ReadSeeker) (moov *MovMoovBox, e error) {
 	moov = new(MovMoovBox)
 	moov.BoxType = head.BoxType
 	moov.BoxSize = head.BoxSize
+	unreadSize := head.BoxSize
 
 	for {
+		if unreadSize <= 0 {
+			break
+		}
+
 		var base *MovBaseBox
 		base, e = ParseMovBaseBox(r)
 		if e != nil {
@@ -27,6 +32,7 @@ func NewMoovBox(head *MovBaseBox, r io.ReadSeeker) (moov *MovMoovBox, e error) {
 			}
 			break
 		}
+		unreadSize -= base.BoxSize
 
 		if base.BoxSize <= 0 {
 			break
