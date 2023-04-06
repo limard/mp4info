@@ -1,3 +1,3 @@
-module github.com/Limard/mp4info
+module github.com/limard/mp4info
 
-go 1.13
+go 1.20

@@ -1,4 +1,4 @@
-package mov
+package mp4info
 
 import (
 	"bytes"

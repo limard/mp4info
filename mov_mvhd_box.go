@@ -1,4 +1,4 @@
-package mov
+package mp4info
 
 import (
 	"bytes"
@@ -8,8 +8,6 @@ import (
 	"log"
 	"time"
 	"unsafe"
-
-	"github.com/Limard/mp4info/comm"
 )
 
 type MovMvhdBox struct {
@@ -41,12 +39,12 @@ func (t *MovMvhdBox) GetModificaionTime() time.Time {
 }
 
 func (t *MovMvhdBox) GetVolume() float32 {
-	f, _ := comm.BytesToFloat32Ex(t.Volume[:1], t.Volume[1:2])
+	f, _ := bytesToFloat32(t.Volume[:1], t.Volume[1:2])
 	return f
 }
 
 func (t *MovMvhdBox) GetRate() float32 {
-	f, _ := comm.BytesToFloat32Ex(t.Rate[:2], t.Rate[2:4])
+	f, _ := bytesToFloat32(t.Rate[:2], t.Rate[2:4])
 	return f
 }
 

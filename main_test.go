@@ -1,21 +1,22 @@
-package main
+package mp4info
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/Limard/mp4info/mov"
+	"testing"
 )
 
-func main() {
-	pfile, err := os.Open(`F:\Photo\2019\19-10-01 乌拉盖\Mi9\VID_20191002_204806.mp4`)
+func Test_main(t *testing.T) {
+	flag.Parse()
+	pfile, err := os.Open(flag.Arg(0))
 	if err != nil {
 		log.Panic(err.Error())
 		return
 	}
 
-	box, e := mov.ParseBox(pfile)
+	box, e := ParseBox(pfile)
 	if e != nil {
 		fmt.Println(e)
 	}
